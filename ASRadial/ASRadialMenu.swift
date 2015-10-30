@@ -49,8 +49,8 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         }
         
         var mutablePopup:[UIView]    = []
-        var arc:NSInteger            = self.delegate?.arcSizeInRadialMenu(self) ?? 90
-        var radius:NSInteger         = self.delegate?.arcRadiousForRadialMenu(self) ?? 80
+        let arc:NSInteger            = self.delegate?.arcSizeInRadialMenu(self) ?? 90
+        let radius:NSInteger         = self.delegate?.arcRadiousForRadialMenu(self) ?? 80
         var start:NSInteger          = 0
         
         if let respondArcStartMethod = self.delegate?.arcStartForRadialMenu {
@@ -85,7 +85,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         
         while currentItem <= itemCount {
             
-            var radians = (angle * (CGFloat(currentItem) - 1.0) + CGFloat(start)) * (CGFloat(M_PI)/CGFloat(180))
+            let radians = (angle * (CGFloat(currentItem) - 1.0) + CGFloat(start)) * (CGFloat(M_PI)/CGFloat(180))
             
             let x      = round (centerX + CGFloat(radius) * cos(CGFloat(radians)));
             let y      = round (centerY + CGFloat(radius) * sin(CGFloat(radians)));
@@ -95,6 +95,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
             let popupButtonframe = CGRectMake(centerX-buttonSize*0.5, centerY-buttonSize*0.5, buttonSize, buttonSize);
             let final   = CGPointMake(x, y);
             let bounce  = CGPointMake(extraX, extraY);
+            
             popupButton = self.delegate?.radialMenubuttonForIndex(self, index: currentItem)
             popupButton?.frame = popupButtonframe
             popupButton?.centerPoint = final
@@ -103,8 +104,11 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
             popupButton?.tag         = currentItem
             popupButton?.delegate    = self
             popupButton?.addTarget(self, action: Selector("buttonPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
-            popupButton.map {inView.insertSubview($0, belowSubview: fromButton)}
-            popupButton.map { mutablePopup.append($0)}
+            
+            inView.insertSubview(popupButton!, belowSubview: fromButton)
+            mutablePopup.append(popupButton!)
+            /*popupButton.map {inView.insertSubview($0, belowSubview: fromButton)}
+            popupButton.map { mutablePopup.append($0)}*/
             currentItem++
             
         }
@@ -150,10 +154,10 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         }
         if self.items?.count > 0 {
             
-            self.itemsWillDisapearIntoButton(sender as UIButton)
+            self.itemsWillDisapearIntoButton(sender as! UIButton)
         } else {
             
-            self.itemsWillAppear(sender as UIButton, frame: frame, inView: view)
+            self.itemsWillAppear(sender as! UIButton, frame: frame, inView: view)
         }
     }
     
@@ -181,7 +185,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         }
         self.itemIndex--
         
-        let button = self.items[self.itemIndex] as ASRadialButton
+        let button = self.items[self.itemIndex] as! ASRadialButton
         button.willDisappear()
         
     }
@@ -193,14 +197,14 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
             return;
         }
         
-        let button = self.items[self.itemIndex] as ASRadialButton
+        let button = self.items[self.itemIndex] as! ASRadialButton
         button.willAppear()
         self.itemIndex++
     }
     
     func buttonPressed(sender:AnyObject) {
        
-        let button = sender as ASRadialButton
+        let button = sender as! ASRadialButton
         self.delegate?.radialMenudidSelectItemAtIndex(self, index: button.tag)
         
     }
