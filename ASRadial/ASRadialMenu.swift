@@ -103,13 +103,13 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
             popupButton?.originPoint = origin
             popupButton?.tag         = currentItem
             popupButton?.delegate    = self
-            popupButton?.addTarget(self, action: Selector("buttonPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+            popupButton?.addTarget(self, action: #selector(ASRadialMenu.buttonPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
             inView.insertSubview(popupButton!, belowSubview: fromButton)
             mutablePopup.append(popupButton!)
             /*popupButton.map {inView.insertSubview($0, belowSubview: fromButton)}
             popupButton.map { mutablePopup.append($0)}*/
-            currentItem++
+            currentItem += 1
             
         }
         
@@ -117,7 +117,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         self.itemIndex = 0;
         let maxDuration:CGFloat = 0.50;
         let flingInterval       = maxDuration/CGFloat(self.items.count);
-        self.animationTimer     = NSTimer.scheduledTimerWithTimeInterval(Double(flingInterval), target: self, selector: Selector("willFlingItem"), userInfo: nil, repeats: true)
+        self.animationTimer     = NSTimer.scheduledTimerWithTimeInterval(Double(flingInterval), target: self, selector: #selector(ASRadialMenu.willFlingItem), userInfo: nil, repeats: true)
         let spinDuration        = CGFloat(self.items.count+1) * flingInterval;
         self.shouldRotateButton(fromButton, forDuration: spinDuration, forwardDirection: false)
         
@@ -141,7 +141,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         
         let maxDuration:CGFloat = 0.50
         let flingInterval       = maxDuration / CGFloat(self.items.count)
-        self.animationTimer     = NSTimer.scheduledTimerWithTimeInterval(Double(flingInterval), target: self, selector: "willRecoilItem", userInfo: nil, repeats: true)
+        self.animationTimer     = NSTimer.scheduledTimerWithTimeInterval(Double(flingInterval), target: self, selector: #selector(ASRadialMenu.willRecoilItem), userInfo: nil, repeats: true)
         let spinDuration        = CGFloat(self.items.count + 1) * flingInterval
         self.shouldRotateButton(button, forDuration: spinDuration, forwardDirection: false)
     }
@@ -183,7 +183,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
             self.animationTimer = nil;
             return;
         }
-        self.itemIndex--
+        self.itemIndex -= 1
         
         let button = self.items[self.itemIndex] as! ASRadialButton
         button.willDisappear()
@@ -199,7 +199,7 @@ class ASRadialMenu: UIView,ASRadialButtonDelegate{
         
         let button = self.items[self.itemIndex] as! ASRadialButton
         button.willAppear()
-        self.itemIndex++
+        self.itemIndex += 1
     }
     
     func buttonPressed(sender:AnyObject) {
